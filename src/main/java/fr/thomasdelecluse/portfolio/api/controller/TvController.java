@@ -13,33 +13,29 @@ import java.io.IOException;
 @RestController
 @CrossOrigin
 public class TvController {
+    OkHttpClient client = new OkHttpClient();
 
     @GetMapping("/Tv/Details/{id}")
     public String getDetailsTv(@PathVariable Number id) {
-        OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.themoviedb.org/3/tv/"+ id +"?api_key=0c0e7b2ac6b9afd4ee3aeb83a772ef7a&language=fr-FR")
+                .url("https://api.themoviedb.org/3/tv/" + id + "?api_key=0c0e7b2ac6b9afd4ee3aeb83a772ef7a&language=fr-FR")
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
-            }
-            return response.body().string();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "error";
-        }
+        return requestExecute(request);
     }
+
     @GetMapping("/Tv/DetailsActors/{id}")
     public String getDetailsActorTV(@PathVariable Number id) {
-        OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.themoviedb.org/3/tv/"+ id +"/credits?api_key=0c0e7b2ac6b9afd4ee3aeb83a772ef7a&language=fr-FR")
+                .url("https://api.themoviedb.org/3/tv/" + id + "/credits?api_key=0c0e7b2ac6b9afd4ee3aeb83a772ef7a&language=fr-FR")
                 .build();
 
+        return requestExecute(request);
+    }
+
+    public String requestExecute(Request request) {
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
